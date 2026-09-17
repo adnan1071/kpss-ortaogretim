@@ -1,19 +1,204 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>KPSS Ortaöğretim</title>
+
+<style>
+
+body{
+background:#111827;
+color:white;
+font-family:Arial,sans-serif;
+margin:0;
+padding:30px;
+text-align:center;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+background:#1f2937;
+padding:20px;
+border-radius:12px;
+}
+
+h1{
+margin-bottom:20px;
+}
+
+button{
+padding:12px 20px;
+margin:8px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+}
+
+.testBtn{
+background:#2563eb;
+color:white;
+}
+
+.option{
+display:block;
+width:100%;
+background:white;
+color:black;
+}
+
+#sonuc{
+font-size:22px;
+font-weight:bold;
+margin-top:15px;
+}
+
+</style>
 </head>
 
-<body style="background:#111827;color:white;font-family:Arial;text-align:center;">
+<body>
+
+<div class="container">
 
 <h1>KPSS ORTAÖĞRETİM TEST MERKEZİ</h1>
 
-<p>GitHub Pages kurulumu başarılı.</p>
+<div>
+Puan:
+<span id="puan">0</span>
+</div>
 
-<button onclick="alert('Sistem çalışıyor!')">
-TEST ET
+<hr>
+
+<h2 id="soru"></h2>
+
+<div id="secenekler"></div>
+
+<div id="sonuc"></div>
+
+<button class="testBtn" onclick="yeniSoru()">
+Yeni Soru
 </button>
 
-</body>
-</html>
+</div>
+
+<script>
+
+let puan = 0;
+let aktifSoru = null;
+let kullanilanSorular = [];
+
+const sorular = [
+
+{
+soru:"Cumhuriyet hangi tarihte ilan edilmiştir?",
+secenekler:[
+"23 Nisan 1920",
+"29 Ekim 1923",
+"30 Ağustos 1922",
+"24 Temmuz 1923"
+],
+dogru:1
+},
+
+{
+soru:"TBMM hangi tarihte açılmıştır?",
+secenekler:[
+"23 Nisan 1920",
+"19 Mayıs 1919",
+"29 Ekim 1923",
+"30 Ağustos 1922"
+],
+dogru:0
+},
+
+{
+soru:"İstiklal Marşı'nın yazarı kimdir?",
+secenekler:[
+"Mehmet Akif Ersoy",
+"Namık Kemal",
+"Yahya Kemal",
+"Ziya Gökalp"
+],
+dogru:0
+},
+
+{
+soru:"Türkiye'nin başkenti hangisidir?",
+secenekler:[
+"İstanbul",
+"Ankara",
+"İzmir",
+"Bursa"
+],
+dogru:1
+},
+
+{
+soru:"Türkiye'nin en uzun akarsuyu hangisidir?",
+secenekler:[
+"Kızılırmak",
+"Fırat",
+"Aras",
+"Sakarya"
+],
+dogru:0
+}
+
+];
+
+function yeniSoru(){
+
+if(kullanilanSorular.length >= sorular.length){
+
+document.getElementById("soru").innerHTML =
+"Soru havuzu tamamlandı.";
+
+document.getElementById("secenekler").innerHTML="";
+
+return;
+}
+
+let rastgele;
+
+do{
+
+rastgele =
+Math.floor(Math.random()*sorular.length);
+
+}
+while(kullanilanSorular.includes(rastgele));
+
+kullanilanSorular.push(rastgele);
+
+aktifSoru = sorular[rastgele];
+
+document.getElementById("soru").innerHTML =
+aktifSoru.soru;
+
+let html = "";
+
+aktifSoru.secenekler.forEach((secenek,index)=>{
+
+html += `
+<button
+class="option"
+onclick="cevapla(${index})">
+${secenek}
+</button>
+`;
+
+});
+
+document.getElementById("secenekler").innerHTML =
+html;
+
+document.getElementById("sonuc").innerHTML = "";
+}
+
+function cevapla(secim){
+
+if(secim === aktifSoru.

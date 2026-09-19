@@ -1,60 +1,73 @@
 <!DOCTYPE html>
 <html lang="tr">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>KPSS Ortaöğretim</title>
+<title>KPSS Ortaöğretim Test Merkezi</title>
 
 <style>
 
 body{
-background:#111827;
+background:#0f172a;
 color:white;
 font-family:Arial,sans-serif;
+padding:20px;
 margin:0;
-padding:30px;
-text-align:center;
 }
 
 .container{
 max-width:900px;
 margin:auto;
-background:#1f2937;
-padding:20px;
-border-radius:12px;
+background:#1e293b;
+padding:25px;
+border-radius:15px;
 }
 
 h1{
-margin-bottom:20px;
+text-align:center;
 }
 
-button{
-padding:12px 20px;
-margin:8px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-size:16px;
-}
-
-.testBtn{
-background:#2563eb;
-color:white;
+#soru{
+margin-top:20px;
+font-size:24px;
 }
 
 .option{
 display:block;
 width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:8px;
 background:white;
 color:black;
+cursor:pointer;
+font-size:16px;
+}
+
+.btn{
+padding:12px 20px;
+background:#2563eb;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+margin-top:15px;
 }
 
 #sonuc{
-font-size:22px;
+font-size:24px;
 font-weight:bold;
 margin-top:15px;
+}
+
+.info{
+display:flex;
+justify-content:space-between;
+margin-bottom:20px;
+font-size:18px;
 }
 
 </style>
@@ -66,20 +79,29 @@ margin-top:15px;
 
 <h1>KPSS ORTAÖĞRETİM TEST MERKEZİ</h1>
 
+<div class="info">
+
 <div>
 Puan:
 <span id="puan">0</span>
 </div>
 
+<div>
+Çözülen:
+<span id="sayac">0</span>
+</div>
+
+</div>
+
 <hr>
 
-<h2 id="soru"></h2>
+<h2 id="soru">Yeni Soru butonuna bas.</h2>
 
 <div id="secenekler"></div>
 
 <div id="sonuc"></div>
 
-<button class="testBtn" onclick="yeniSoru()">
+<button class="btn" onclick="yeniSoru()">
 Yeni Soru
 </button>
 
@@ -88,8 +110,9 @@ Yeni Soru
 <script>
 
 let puan = 0;
+let sayac = 0;
 let aktifSoru = null;
-let kullanilanSorular = [];
+let kullanilan = [];
 
 const sorular = [
 
@@ -152,53 +175,87 @@ dogru:0
 
 function yeniSoru(){
 
-if(kullanilanSorular.length >= sorular.length){
+if(kullanilan.length >= sorular.length){
 
 document.getElementById("soru").innerHTML =
 "Soru havuzu tamamlandı.";
 
-document.getElementById("secenekler").innerHTML="";
+document.getElementById("secenekler").innerHTML = "";
 
 return;
 }
 
-let rastgele;
+let no;
 
 do{
 
-rastgele =
-Math.floor(Math.random()*sorular.length);
+no = Math.floor(Math.random()*sorular.length);
 
 }
-while(kullanilanSorular.includes(rastgele));
+while(kullanilan.includes(no));
 
-kullanilanSorular.push(rastgele);
+kullanilan.push(no);
 
-aktifSoru = sorular[rastgele];
+aktifSoru = sorular[no];
 
 document.getElementById("soru").innerHTML =
 aktifSoru.soru;
 
 let html = "";
 
-aktifSoru.secenekler.forEach((secenek,index)=>{
+for(let i=0;i<aktifSoru.secenekler.length;i++){
 
 html += `
 <button
 class="option"
-onclick="cevapla(${index})">
-${secenek}
+onclick="cevapla(${i})">
+${aktifSoru.secenekler[i]}
 </button>
 `;
 
-});
+}
 
 document.getElementById("secenekler").innerHTML =
 html;
 
 document.getElementById("sonuc").innerHTML = "";
+
 }
 
 function cevapla(secim){
 
-if(secim === aktifSoru.
+sayac++;
+
+document.getElementById("sayac").innerHTML =
+sayac;
+
+if(secim === aktifSoru.dogru){
+
+puan += 10;
+
+document.getElementById("puan").innerHTML =
+puan;
+
+document.getElementById("sonuc").innerHTML =
+"✅ DOĞRU";
+
+document.getElementById("sonuc").style.color =
+"#22c55e";
+
+}
+else{
+
+document.getElementById("sonuc").innerHTML =
+"❌ YANLIŞ";
+
+document.getElementById("sonuc").style.color =
+"#ef4444";
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

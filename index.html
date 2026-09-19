@@ -107,7 +107,34 @@ Yeni Soru
 
 </div>
 
-<script>
+<script>function sayaciBaslat(){
+
+setInterval(function(){
+
+if(kalanSure <= 0){
+
+document.getElementById("soru").innerHTML =
+"Süre doldu!";
+
+document.getElementById("secenekler").innerHTML = "";
+
+return;
+
+}
+
+kalanSure--;
+
+let dakika = Math.floor(kalanSure / 60);
+
+let saniye = kalanSure % 60;
+
+document.getElementById("sure").innerHTML =
+dakika + ":" + (saniye < 10 ? "0" : "") + saniye;
+
+},1000);
+
+}
+ 
 
 let puan = 0;
  let kalanSure = 600; // 10 dakika = 600 saniye 
